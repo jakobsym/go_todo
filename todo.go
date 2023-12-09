@@ -15,7 +15,7 @@ type item struct {
 	CompletedAt time.Time
 }
 
-type List []item
+type List []item // 1 indexed
 
 func (l *List) Add(task string) {
 	t := item{
@@ -86,5 +86,5 @@ func (l *List) Get(fileName string) error {
 		return nil
 	}
 
-	return json.Unmarshal(file, l)
+	return json.Unmarshal(file, l) // converting JSON into Go struct
 }
