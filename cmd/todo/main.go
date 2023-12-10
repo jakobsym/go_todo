@@ -10,9 +10,11 @@ import (
 const TodoFileName = "test.json" // TODO: Hardcode a file name (Change later)
 
 func main() {
-	task := flag.String("task", "", "Task included in Todo list")
-	list := flag.Bool("list", false, "List todo list task(s)")
-	complete := flag.Int("complete", 0, "Task to be completed")
+	/* Can use flag.Usage at top to create custom -h message */
+
+	var task = flag.String("task", "", "Task included in Todo list")
+	var list = flag.Bool("list", false, "List todo list task(s)")
+	var complete = flag.Int("complete", 0, "Task to be completed")
 
 	flag.Parse()
 
