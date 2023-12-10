@@ -12,9 +12,6 @@ const TodoFileName = "test.json" // TODO: Hardcode a file name (Change later)
 func main() {
 	l := &todo.List{} // & because (l *List) type
 
-	// read todo items from file
-	// have to do err := l.Get("") because Get() returns an error
-	// doing a conditional as we need to handle error
 	if err := l.Get(TodoFileName); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -29,7 +26,8 @@ func main() {
 		}
 	// Add
 	default:
-		item := strings.Join(os.Args[1:], " ")
+		item := strings.Join(os.Args[1:], " ") // os.Args[] is great but not flexiable; Better to use 'flags'
+
 		// add item list
 		l.Add(item)
 		// save the list
