@@ -27,7 +27,7 @@ func main() {
 		for _, item := range *l {
 			fmt.Println(item.Task)
 		}
-	// Add a todo item to the List and save it
+	// Add
 	default:
 		item := strings.Join(os.Args[1:], " ")
 		// add item list
