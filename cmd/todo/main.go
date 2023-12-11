@@ -7,11 +7,14 @@ import (
 	"todo"
 )
 
-const TodoFileName = "test.json" // TODO: Hardcode a file name (Change later)
-
 func main() {
 	/* Can use flag.Usage at top to create custom -h message */
-	//var newTask = flag.String("task", "", "tetse")
+
+	var TodoFileName = ".todo.json"
+	// create via -> < export TODO_FILENAME=new-todo.json >  from your cli
+	if os.Getenv("TODO_FILENAME") != "" {
+		TodoFileName = os.Getenv("TODO_FILENAME")
+	}
 
 	var task = flag.String("task", "", "Task included in Todo list")
 	var list = flag.Bool("list", false, "List todo list task(s)")
@@ -46,7 +49,6 @@ func main() {
 		}
 	case *task != "":
 		// Add Task
-		fmt.Println("task = ", *task)
 		l.Add(*task)
 
 		// Save Changes
