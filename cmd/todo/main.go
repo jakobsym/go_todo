@@ -11,6 +11,7 @@ const TodoFileName = "test.json" // TODO: Hardcode a file name (Change later)
 
 func main() {
 	/* Can use flag.Usage at top to create custom -h message */
+	//var newTask = flag.String("task", "", "tetse")
 
 	var task = flag.String("task", "", "Task included in Todo list")
 	var list = flag.Bool("list", false, "List todo list task(s)")
@@ -29,11 +30,7 @@ func main() {
 	// Display all todo items in List
 	case *list:
 		// List to do items
-		for _, item := range *l {
-			if !item.Done {
-				fmt.Println(item.Task)
-			}
-		}
+		fmt.Print(l)
 
 	// Mark Complete
 	case *complete > 0:
@@ -49,6 +46,7 @@ func main() {
 		}
 	case *task != "":
 		// Add Task
+		fmt.Println("task = ", *task)
 		l.Add(*task)
 
 		// Save Changes
