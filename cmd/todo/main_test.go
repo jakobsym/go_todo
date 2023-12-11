@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -15,7 +16,7 @@ import (
 
 var (
 	binName  = "todo"
-	fileName = "test.json"
+	fileName = "testing_list.json"
 )
 
 // Calls 'go build' tool
@@ -51,7 +52,7 @@ func TestTodoCLI(t *testing.T) {
 	task := "test task number 1"
 
 	dir, err := os.Getwd()
-	fmt.Println("dir = ", dir)
+	//fmt.Println("dir = ", dir)
 
 	if err != nil {
 		t.Fatal(err)
@@ -59,20 +60,39 @@ func TestTodoCLI(t *testing.T) {
 
 	cmdPath := filepath.Join(dir, binName) // path to build tool compiled
 
-	t.Run("AddNewTask", func(t *testing.T) {
-		cmd := exec.Command(cmdPath, "-task", task) // execute compiled binary
+	t.Run("AddNewTaskFromArgs", func(t *testing.T) {
+		os.Setenv("TODO_FILENAME", fileName)
+		cmd := exec.Command(cmdPath, "-add", task) // execute compiled binary
+		if err := cmd.Run(); err != nil {
+			t.Fatal(err)
+		}
+	})
+	task2 := "test task number 2"
+
+	t.Run("AddNewTaskFromSTDIN", func(t *testing.T) {
+		os.Setenv("TODO_FILENAME", fileName)
+		cmd := exec.Command(cmdPath, "-add")
+		cmdStdin, err := cmd.StdinPipe() // create stdin pipe connection
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		io.WriteString(cmdStdin, task2) // write to stdin pipe
+		cmdStdin.Close()                // close stdin
+
 		if err := cmd.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("ListTasks", func(t *testing.T) {
+		os.Setenv("TODO_FILENAME", fileName)
 		cmd := exec.Command(cmdPath, "-list")
 		out, err := cmd.CombinedOutput()
 		if err != nil {
 			t.Fatal(err)
 		}
-		expected := fmt.Sprintf(" 1: %s\n", task)
+		expected := fmt.Sprintf(" 1: %s\n 2: %s\n", task, task2)
 
 		if expected != string(out) {
 			t.Errorf("Expected %q, got %q instead\n", expected, string(out))
